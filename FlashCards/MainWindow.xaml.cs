@@ -1,4 +1,7 @@
-﻿using System;
+﻿using FlashCards.Models;
+using FlashCards.ViewModels;
+using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +26,17 @@ namespace FlashCards
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new MainViewModel();
+        }
+
+        private void btnOpenFile_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+
+            if (fileDialog.ShowDialog() == true)
+            {
+                TextBox_FileName.Text = fileDialog.FileName;
+            }
         }
     }
 }
