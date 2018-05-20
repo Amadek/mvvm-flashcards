@@ -32,6 +32,7 @@ namespace FlashCards
         private void btnOpenFile_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*| EXE files (*.exe)|*.exe";
 
             if (fileDialog.ShowDialog() == true)
             {

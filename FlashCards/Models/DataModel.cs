@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace FlashCards.Models
 {
-    class Data
+    class DataModel
     {
         public static void Load(string file_name)
         {
@@ -18,19 +18,26 @@ namespace FlashCards.Models
 
         public List<string[]> FlashCards { get; private set; }
 
-        public Data()
+        public DataModel(string fileName)
         {
             FlashCards = new List<string[]>();
 
-            using (StreamReader sr = new StreamReader("data.txt"))
+            using (StreamReader sr = new StreamReader(fileName))
             {
                 string[] line = new string[2];
                 while (!sr.EndOfStream)
                 {
                     line = sr.ReadLine().Split(';');
+                    if (line.Length != 2)
+                        throw new InvalidDataException("Nieprawidłowe dane");
                     FlashCards.Add(line);
                 }
             }
+        }
+
+        public DataModel() : this("data.txt")
+        {
+
         }
 
         public void ShuffleCards()
