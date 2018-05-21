@@ -60,6 +60,8 @@ namespace FlashCards.ViewModels
         public Command NextCommand { get; private set; }
         public Command ShowCommand { get; private set; }
         public Command DontKnowCommand { get; private set; }
+        public Command SaveCommand { get; private set; }
+        public Command ShuffleCommand { get; private set; }
 
         private bool _isFlashCardsEmpty(object obj)
         {
@@ -81,6 +83,7 @@ namespace FlashCards.ViewModels
                     try
                     {
                         _dataModel = new DataModel(obj.ToString());
+                        FlierKey = _dataModel.FlashCards[0][0];
                     }
                     catch (InvalidDataException e)
                     {
@@ -120,6 +123,7 @@ namespace FlashCards.ViewModels
             #region ShowCommand Initialization
             ShowCommand = new Command(obj =>
             {
+                // Show value of key.
                 FlierKey = _dataModel.FlashCards[0][1];
 
             }, _isFlashCardsEmpty);
@@ -132,7 +136,23 @@ namespace FlashCards.ViewModels
                     _dataModel.FlashCards.RemoveAt(0);
                     FlierKey = _dataModel.FlashCards[0][0];
 
-                }, _isFlashCardsEmpty); 
+                }, _isFlashCardsEmpty);
+            #endregion
+
+            #region SaveCommand Initialization
+            SaveCommand = new Command(obj =>
+            {
+                _dataModel.Save();
+                MessageBox.Show("Stan postępu zapisany.");
+            });
+            #endregion
+
+            #region ShuffleCommand Initialization
+            ShuffleCommand = new Command(obj =>
+                {
+                    _dataModel.ShuffleCards();
+                    FlierKey = _dataModel.FlashCards[0][0];
+                }); 
             #endregion
         }
     }

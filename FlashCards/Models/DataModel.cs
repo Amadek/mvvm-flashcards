@@ -7,15 +7,6 @@ namespace FlashCards.Models
 {
     class DataModel
     {
-        public static void Load(string file_name)
-        {
-            using (StreamReader sr = new StreamReader(file_name))
-            using (StreamWriter sw = new StreamWriter("data.txt"))
-            {
-                sw.Write(sr.ReadToEnd());
-            }
-        }
-
         public List<string[]> FlashCards { get; private set; }
 
         public DataModel(string fileName)
@@ -38,6 +29,17 @@ namespace FlashCards.Models
         public DataModel() : this("data.txt")
         {
 
+        }
+
+        public void Save()
+        {
+            using (StreamWriter sw = new StreamWriter("data.txt"))
+            {
+                foreach (var item in FlashCards)
+                {
+                    sw.WriteLine("{0};{1}", item[0], item[1]);
+                }
+            }
         }
 
         public void ShuffleCards()
