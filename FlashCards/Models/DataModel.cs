@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -39,6 +40,22 @@ namespace FlashCards.Models
                 {
                     sw.WriteLine("{0};{1}", item[0], item[1]);
                 }
+            }
+        }
+
+        public void Send()
+        {
+            using (StreamReader sr = new StreamReader("data.txt"))
+            {
+                string fileContent = sr.ReadToEnd().Replace("\r\n", "/");
+
+                MySqlConnection db = new MySqlConnection("server=localhost;database=amadek;uid=root;password=;sslmode=none");
+                db.Open();
+
+                MySqlCommand cmd = new MySqlCommand($"INSERT INTO flashcards VALUES(null, \"user\", \"{fileContent}\")", db);
+                cmd.ExecuteNonQuery();
+
+                db.Close();
             }
         }
 

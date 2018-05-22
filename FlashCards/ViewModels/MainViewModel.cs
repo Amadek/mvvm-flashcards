@@ -143,7 +143,8 @@ namespace FlashCards.ViewModels
             SaveCommand = new Command(obj =>
             {
                 _dataModel.Save();
-                MessageBox.Show("Stan postępu zapisany.");
+                _dataModel.Send();
+                MessageBox.Show("Stan postępu zapisany. Wrzucony do bazy.");
             });
             #endregion
 
