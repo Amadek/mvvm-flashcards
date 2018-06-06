@@ -75,11 +75,11 @@ namespace FlashCards.ViewModels
 
         public MainViewModel()
         {
+            DBManager.GetInstance();
+            DBManager.GetInstance().GetCards(1, "Kategorią 1");
             NextCommand = new Command(obj =>
             {
-                DBManager.GetInstance();
-                User.LoadUser("Amadek");
-                MessageBox.Show(User.GetInstance().ID.ToString());
+
             });
             //_dataModel = new FileManager();
 

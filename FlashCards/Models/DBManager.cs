@@ -44,7 +44,7 @@ namespace FlashCards.Models
         
         public int GetUserId(string userName)
         {
-            _sql = string.Format("CALL get_user_id(\"{0}\")", userName);
+            _sql = $@"CALL get_user_id(""{userName}"")";
             _cmd = new MySqlCommand(_sql, _connection);
 
             int result;
@@ -54,6 +54,37 @@ namespace FlashCards.Models
                 result = _reader.GetInt32(0);
             }
             return result;
+        }
+
+        public List<Flier> GetCards(int userId, string unit)
+        {
+            _sql = $@"CALL show_cards({userId}, ""{unit}"")";
+            _cmd = new MySqlCommand(_sql, _connection);
+            
+            List<Flier> fliers = new List<Flier>();
+            using (_reader = _cmd.ExecuteReader())
+            {
+                _reader.Read();
+
+                // kot;cat/pies;dog/...;.../
+                string content = _reader.GetString("content");
+
+                /* kot;cat  \   new Flier() { Polish = kot, English = cat }  \
+                 * pies;dog  => new Flier() { Polish = pies, English = dog }  => ToList();
+                 * ...;...  /   new Flier() { Polish = ..., Englidh = ...}   /
+                 */
+                content = content.Substring(0, content.Length - 1);
+                fliers = content
+                    .Split('/')
+                    .Select(x => x.Split(';'))
+                    .Select(x => new Flier()
+                    {
+                        Polish = x[0],
+                        English = x[1]
+                    })
+                    .ToList();
+            }
+            return fliers;
         }
 
         // MORE...
