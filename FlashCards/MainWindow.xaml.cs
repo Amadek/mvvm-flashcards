@@ -28,16 +28,5 @@ namespace FlashCards
             InitializeComponent();
             DataContext = new MainViewModel();
         }
-
-        private void btnOpenFile_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog fileDialog = new OpenFileDialog();
-            fileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*| EXE files (*.exe)|*.exe";
-
-            if (fileDialog.ShowDialog() == true)
-            {
-                TextBox_FileName.Text = fileDialog.FileName;
-            }
-        }
     }
 }

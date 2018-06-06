@@ -6,24 +6,17 @@
         xmlns:local="clr-namespace:FlashCards"
         mc:Ignorable="d"
         Title="MainWindow" Height="320" Width="340">
-    <StackPanel Margin="5">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="35"/>
-                <ColumnDefinition Width="65"/>
-                <ColumnDefinition Width="65"/>
-                <ColumnDefinition Width="60"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="23"/>
-            </Grid.RowDefinitions>
-            <TextBox x:Name="TextBox_FileName" IsReadOnly="True" Grid.Column="0" Margin="0,0,5,0" Text="{Binding FileName}"/>
-            <Button Margin="0,0,5,0" Grid.Column="1" Click="btnOpenFile_Click">...</Button>
-            <Button Margin="0,0,5,0" Grid.Column="2" Command="{Binding FileCommand}" CommandParameter="{Binding ElementName=TextBox_FileName, Path=Text}">Wczytaj</Button>
-            <Button Margin="0,0,5,0" Grid.Column="3" Command="{Binding SaveCommand}">Zapisz</Button>
-            <Button Grid.Column="4" Command="{Binding ShuffleCommand}">Losuj</Button>
-        </Grid>
+    <StackPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_Fiszki">
+                <MenuItem Header="_Otwórz" Command="{Binding FileCommand}"/>
+                <MenuItem Header="Zapi_sz" Command="{Binding SaveCommand}"/>
+                <MenuItem Header="_Losuj" Command="{Binding ShuffleCommand}"/>
+                <MenuItem Header="_Wyślij" Command="{Binding SendCommand}"/>
+                <Separator/>
+                <MenuItem Header="_Zakończ"/>
+            </MenuItem>
+        </Menu>
         <Grid Margin="0,5,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>

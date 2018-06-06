@@ -1,4 +1,6 @@
 ﻿using FlashCards.Models;
+using Microsoft.Win32;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -54,7 +56,7 @@ namespace FlashCards.ViewModels
         } 
         #endregion
         
-        private DataModel _dataModel;
+        private FileManager _dataModel;
 
         public Command FileCommand { get; private set; }
         public Command NextCommand { get; private set; }
@@ -62,99 +64,113 @@ namespace FlashCards.ViewModels
         public Command DontKnowCommand { get; private set; }
         public Command SaveCommand { get; private set; }
         public Command ShuffleCommand { get; private set; }
+        public Command SendCommand { get; private set; }
 
-        private bool _isFlashCardsEmpty(object obj)
-        {
-            if (_dataModel.FlashCards.Count == 0)
-                return false;
-            return true;
-        }
+        //private bool _isFlashCardsEmpty(object obj)
+        //{
+        //    if (_dataModel.FlashCards.Count == 0)
+        //        return false;
+        //    return true;
+        //}
 
         public MainViewModel()
         {
-            _dataModel = new DataModel();
-
-            FlierKey = _dataModel.FlashCards[0][0];
-
-            #region FileCommand Initialization
-            FileCommand = new Command(
-                obj =>
-                {
-                    try
-                    {
-                        _dataModel = new DataModel(obj.ToString());
-                        FlierKey = _dataModel.FlashCards[0][0];
-                    }
-                    catch (InvalidDataException e)
-                    {
-                        MessageBox.Show(e.Message);
-                    }
-                },
-                obj =>
-                {
-                    if (obj.ToString() == Default["FileName"])
-                    {
-                        return false;
-                    }
-                    return true;
-                }
-            );
-            #endregion
-
-            #region NextCommand Initialization
-            NextCommand = new Command(
-                obj =>
-                {
-                    _dataModel.FlashCards.RemoveAt(0);
-
-                    if (_dataModel.FlashCards.Count == 0)
-                    {
-                        FlierKey = "To już wszystkie!";
-                    }
-                    else
-                    {
-                        FlierKey = _dataModel.FlashCards[0][0];
-                    }
-                },
-                _isFlashCardsEmpty
-            );
-            #endregion
-
-            #region ShowCommand Initialization
-            ShowCommand = new Command(obj =>
+            NextCommand = new Command(obj =>
             {
-                // Show value of key.
-                FlierKey = _dataModel.FlashCards[0][1];
-
-            }, _isFlashCardsEmpty);
-            #endregion
-
-            #region DontKnowCommand Initialization
-            DontKnowCommand = new Command(obj =>
-                {
-                    _dataModel.FlashCards.Add(_dataModel.FlashCards[0]);
-                    _dataModel.FlashCards.RemoveAt(0);
-                    FlierKey = _dataModel.FlashCards[0][0];
-
-                }, _isFlashCardsEmpty);
-            #endregion
-
-            #region SaveCommand Initialization
-            SaveCommand = new Command(obj =>
-            {
-                _dataModel.Save();
-                _dataModel.Send();
-                MessageBox.Show("Stan postępu zapisany. Wrzucony do bazy.");
+                DBManager.GetInstance();
+                User.LoadUser("Amadek");
+                MessageBox.Show(User.GetInstance().ID.ToString());
             });
-            #endregion
+            //_dataModel = new FileManager();
 
-            #region ShuffleCommand Initialization
-            ShuffleCommand = new Command(obj =>
-                {
-                    _dataModel.ShuffleCards();
-                    FlierKey = _dataModel.FlashCards[0][0];
-                }); 
-            #endregion
+            //FlierKey = _dataModel.FlashCards[0][0];
+
+            //#region FileCommand Initialization
+            //FileCommand = new Command(obj =>
+            //{
+            //    OpenFileDialog fileDialog = new OpenFileDialog();
+            //    fileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+
+            //    if (fileDialog.ShowDialog() == true)
+            //    {
+            //        try
+            //        {
+            //            _dataModel = new FileManager(fileDialog.FileName);
+            //            FlierKey = _dataModel.FlashCards[0][0];
+            //        }
+            //        catch (InvalidDataException e)
+            //        {
+            //            MessageBox.Show(e.Message);
+            //        }
+            //    }
+            //});
+            //#endregion
+
+            //#region NextCommand Initialization
+            //NextCommand = new Command(obj =>
+            //{
+            //    _dataModel.FlashCards.RemoveAt(0);
+
+            //    if (_dataModel.FlashCards.Count == 0)
+            //    {
+            //        FlierKey = "To już wszystkie!";
+            //    }
+            //    else
+            //    {
+            //        FlierKey = _dataModel.FlashCards[0][0];
+            //    }
+            //}, _isFlashCardsEmpty);
+            //#endregion
+
+            //#region ShowCommand Initialization
+            //ShowCommand = new Command(obj =>
+            //{
+            //    // Show value of key.
+            //    FlierKey = _dataModel.FlashCards[0][1];
+
+            //}, _isFlashCardsEmpty);
+            //#endregion
+
+            //#region DontKnowCommand Initialization
+            //DontKnowCommand = new Command(obj =>
+            //{
+            //    _dataModel.FlashCards.Add(_dataModel.FlashCards[0]);
+            //    _dataModel.FlashCards.RemoveAt(0);
+            //    FlierKey = _dataModel.FlashCards[0][0];
+
+            //}, _isFlashCardsEmpty);
+            //#endregion
+
+            //#region SaveCommand Initialization
+            //SaveCommand = new Command(obj =>
+            //{
+            //    _dataModel.Save();
+            //});
+            //#endregion
+
+            //#region ShuffleCommand Initialization
+            //ShuffleCommand = new Command(obj =>
+            //{
+            //    _dataModel.ShuffleCards();
+            //    FlierKey = _dataModel.FlashCards[0][0];
+            //});
+            //#endregion
+
+            //#region SendCommand Initalization
+            //SendCommand = new Command(obj =>
+            //{
+            //    try
+            //    {
+            //        _dataModel.Send();
+            //        MessageBox.Show("Wysłano.");
+            //    }
+            //    catch (MySqlException)
+            //    {
+            //        MessageBox.Show("Problem z połączeniem się z bazą.");
+            //    }
+                
+            //}); 
+            //#endregion
         }
     }
 }
