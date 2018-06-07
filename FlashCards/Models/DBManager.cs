@@ -18,7 +18,14 @@ namespace FlashCards.Models
             if (_child == null)
             {
                 _child = new DBManager();
-                _child._connection = new MySqlConnection("server=localhost;database=cards;uid=root;password=;sslmode=none");
+                _child._connection = new MySqlConnection(
+                    @"server=localhost;
+                    database=cards;
+                    uid=root;
+                    password=;
+                    sslmode=none;
+                    charset=utf8"
+                );
                 _child._connection.Open();
             }
             return _child;
@@ -37,7 +44,7 @@ namespace FlashCards.Models
 
         public void Send(string userName, string content)
         {
-            _sql = string.Format("CALL insert_cards({0},\"{1}\")", userName, content);
+            _sql = $@"CALL insert_cards({userName},""{content}"")";
             _cmd = new MySqlCommand(_sql, _connection);
             _cmd.ExecuteNonQuery();
         }
@@ -56,12 +63,12 @@ namespace FlashCards.Models
             return result;
         }
 
-        public List<Flier> GetCards(int userId, string unit)
+        public List<string[]> GetCards(int userId, string unit)
         {
             _sql = $@"CALL show_cards({userId}, ""{unit}"")";
             _cmd = new MySqlCommand(_sql, _connection);
-            
-            List<Flier> fliers = new List<Flier>();
+
+            List<string[]> fliers;
             using (_reader = _cmd.ExecuteReader())
             {
                 _reader.Read();
@@ -69,19 +76,14 @@ namespace FlashCards.Models
                 // kot;cat/pies;dog/...;.../
                 string content = _reader.GetString("content");
 
-                /* kot;cat  \   new Flier() { Polish = kot, English = cat }  \
-                 * pies;dog  => new Flier() { Polish = pies, English = dog }  => ToList();
-                 * ...;...  /   new Flier() { Polish = ..., Englidh = ...}   /
+                /* kot;cat  \   new string[] { kot, cat }  \
+                 * pies;dog  => new string[] { pies, dog }  => ToList();
+                 * ...;...  /   new string[] { ..., ...}   /
                  */
                 content = content.Substring(0, content.Length - 1);
                 fliers = content
                     .Split('/')
                     .Select(x => x.Split(';'))
-                    .Select(x => new Flier()
-                    {
-                        Polish = x[0],
-                        English = x[1]
-                    })
                     .ToList();
             }
             return fliers;
