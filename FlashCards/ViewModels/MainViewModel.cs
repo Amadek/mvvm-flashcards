@@ -11,14 +11,8 @@ using System.Windows;
 
 namespace FlashCards.ViewModels
 {
-    class MainViewModel : ObservableObject
+    class MainViewModel : BaseViewModel
     {
-        public readonly Dictionary<string, string> Default = new Dictionary<string, string>()
-        {
-            { "FileName", "Wybierz plik..." },
-            { "FlierKey", "Tutaj będą wyświetlać się twoje fiszki." }
-        };
-
         #region FileName Property
         private string _fileName;
         public string FileName
@@ -27,7 +21,7 @@ namespace FlashCards.ViewModels
             {
                 if (string.IsNullOrEmpty(_fileName))
                 {
-                    return Default["FileName"];
+                    return "Wybierz plik...";
                 }
                 return _fileName;
             }
@@ -45,7 +39,7 @@ namespace FlashCards.ViewModels
             get
             {
                 if (string.IsNullOrEmpty(_flierKey))
-                    return Default["FlierKey"];
+                    return "Tutaj będą wyświetlać się twoje fiszki.";
                 return _flierKey;
             }
             set
@@ -56,8 +50,6 @@ namespace FlashCards.ViewModels
         } 
         #endregion
         
-        private FileManager _dataModel;
-
         public Command FileCommand { get; private set; }
         public Command NextCommand { get; private set; }
         public Command ShowCommand { get; private set; }
@@ -65,25 +57,23 @@ namespace FlashCards.ViewModels
         public Command SaveCommand { get; private set; }
         public Command ShuffleCommand { get; private set; }
         public Command SendCommand { get; private set; }
-
-        //private bool _isFlashCardsEmpty(object obj)
-        //{
-        //    if (_dataModel.FlashCards.Count == 0)
-        //        return false;
-        //    return true;
-        //}
-
+        
         public MainViewModel()
         {
             DBManager.GetInstance();
-            NextCommand = new Command(obj =>
-            {
+            User.LoadUser("TestUser");
+            User.GetInstance().LoadCardsDB("Testowy Rozdział");
+            FlierKey = User.GetInstance().Cards[0][0];
 
-            });
-            //_dataModel = new FileManager();
+            NextCommand = new Command(Next, IsNotCardsEmpty);
 
-            //FlierKey = _dataModel.FlashCards[0][0];
+            ShowCommand = new Command(Show, IsNotCardsEmpty);
 
+            DontKnowCommand = new Command(DontKnow, IsNotCardsEmpty);
+
+            ShuffleCommand = new Command(Shufle, IsNotCardsEmpty);
+
+            #region TO REFACTOR
             //#region FileCommand Initialization
             //FileCommand = new Command(obj =>
             //{
@@ -105,53 +95,10 @@ namespace FlashCards.ViewModels
             //});
             //#endregion
 
-            //#region NextCommand Initialization
-            //NextCommand = new Command(obj =>
-            //{
-            //    _dataModel.FlashCards.RemoveAt(0);
-
-            //    if (_dataModel.FlashCards.Count == 0)
-            //    {
-            //        FlierKey = "To już wszystkie!";
-            //    }
-            //    else
-            //    {
-            //        FlierKey = _dataModel.FlashCards[0][0];
-            //    }
-            //}, _isFlashCardsEmpty);
-            //#endregion
-
-            //#region ShowCommand Initialization
-            //ShowCommand = new Command(obj =>
-            //{
-            //    // Show value of key.
-            //    FlierKey = _dataModel.FlashCards[0][1];
-
-            //}, _isFlashCardsEmpty);
-            //#endregion
-
-            //#region DontKnowCommand Initialization
-            //DontKnowCommand = new Command(obj =>
-            //{
-            //    _dataModel.FlashCards.Add(_dataModel.FlashCards[0]);
-            //    _dataModel.FlashCards.RemoveAt(0);
-            //    FlierKey = _dataModel.FlashCards[0][0];
-
-            //}, _isFlashCardsEmpty);
-            //#endregion
-
             //#region SaveCommand Initialization
             //SaveCommand = new Command(obj =>
             //{
             //    _dataModel.Save();
-            //});
-            //#endregion
-
-            //#region ShuffleCommand Initialization
-            //ShuffleCommand = new Command(obj =>
-            //{
-            //    _dataModel.ShuffleCards();
-            //    FlierKey = _dataModel.FlashCards[0][0];
             //});
             //#endregion
 
@@ -167,9 +114,46 @@ namespace FlashCards.ViewModels
             //    {
             //        MessageBox.Show("Problem z połączeniem się z bazą.");
             //    }
-                
+
             //}); 
             //#endregion
+            #endregion
+        }
+
+        private bool IsNotCardsEmpty(object obj)
+        {
+            return !User.GetInstance().IsCardsEmpty();
+        }
+
+        private void Next(object obj)
+        {
+            User.GetInstance().Cards.RemoveAt(0);
+
+            if (User.GetInstance().Cards.Count == 0)
+            {
+                FlierKey = "To już wszystkie!";
+            }
+            else
+            {
+                FlierKey = User.GetInstance().Cards[0][0];
+            }
+        }
+
+        private void Show(object obj)
+        {
+            FlierKey = User.GetInstance().Cards[0][1];
+        }
+
+        private void DontKnow(object obj)
+        {
+            User.GetInstance().MoveCardToEnd();
+            FlierKey = User.GetInstance().Cards[0][0];
+        }
+
+        private void Shufle(object obj)
+        {
+            User.GetInstance().ShuffleCards();
+            FlierKey = User.GetInstance().Cards[0][0];
         }
     }
 }

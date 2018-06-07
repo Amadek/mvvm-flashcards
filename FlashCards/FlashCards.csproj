@@ -69,11 +69,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\DBManager.cs" />
-    <Compile Include="Models\Flier.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="ViewModels\Command.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\ObservableObject.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

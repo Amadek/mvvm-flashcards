@@ -89,6 +89,21 @@ namespace FlashCards.Models
             return fliers;
         }
 
-        // MORE...
+        public List<string> GetUnits(int userId)
+        {
+            _sql = $"CALL get_units({userId})";
+            _cmd = new MySqlCommand(_sql, _connection);
+
+            List<string> units = new List<string>();
+
+            using (_reader = _cmd.ExecuteReader())
+            {
+                while (_reader.Read())
+                {
+                    units.Add(_reader.GetString("unit"));
+                }
+            }
+            return units;
+        }
     }
 }

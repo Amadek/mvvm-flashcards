@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FlashCards.ViewModels
 {
-    class ObservableObject : INotifyPropertyChanged
+    class BaseViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

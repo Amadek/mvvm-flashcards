@@ -56,5 +56,31 @@ namespace FlashCards.Models.Tests
                 Assert.AreEqual(expected[i][1], result[i][1]);
             }
         }
+
+        [TestMethod()]
+        public void GetUnitsTest()
+        {
+            /* cards
+             * +----+---------+--------------------+-----------------------------+
+             * | id | user_id | unit               | content                     |
+             * +----+---------+--------------------+-----------------------------+
+             * | 1  | 1       | Testowy Rozdział   | pies;dog/kot;cat/dłoń;hand/ |
+             * | 2  | 1       | Testowy Rozdział 2 | ąę;ae/źć;zc/                |
+             * +----+---------+--------------------+-----------------------------+
+             */
+            
+            List<string> expected = new List<string>()
+            {
+                "Testowy Rozdział",
+                "Testowy Rozdział 2"
+            };
+
+            List<string> result = DBManager.GetInstance().GetUnits(1);
+
+            for (int i = 0; i < expected.Count; i++)
+            {
+                Assert.AreEqual(expected[i], result[i]);
+            }
+        }
     }
 }
