@@ -9,16 +9,16 @@ namespace FlashCards.Models
 {
     public class DBManager
     {
-        private static DBManager _child;
+        private static DBManager _instance;
 
         private DBManager() { }
 
         public static DBManager GetInstance()
         {
-            if (_child == null)
+            if (_instance == null)
             {
-                _child = new DBManager();
-                _child._connection = new MySqlConnection(
+                _instance = new DBManager();
+                _instance._connection = new MySqlConnection(
                     @"server=localhost;
                     database=cards;
                     uid=root;
@@ -26,9 +26,9 @@ namespace FlashCards.Models
                     sslmode=none;
                     charset=utf8"
                 );
-                _child._connection.Open();
+                _instance._connection.Open();
             }
-            return _child;
+            return _instance;
         }
 
         private MySqlConnection _connection;
@@ -104,6 +104,32 @@ namespace FlashCards.Models
                 }
             }
             return units;
+        }
+
+        public bool IsValid(string nick, string pass)
+        {
+            _sql = $@"CALL is_valid(""{nick}"",""{pass}"")";
+            _cmd = new MySqlCommand(_sql, _connection);
+            using (_reader = _cmd.ExecuteReader())
+            {
+                if (!_reader.HasRows)
+                    return false;
+                else
+                    return true;
+            }
+        }
+
+        public bool IsNickInDB(string nick)
+        {
+            _sql = $@"CALL get_user(""{nick}"")";
+            _cmd = new MySqlCommand(_sql, _connection);
+            using (_reader = _cmd.ExecuteReader())
+            {
+                if (!_reader.HasRows)
+                    return false;
+                else
+                    return true;
+            }   
         }
     }
 }

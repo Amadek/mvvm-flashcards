@@ -82,5 +82,41 @@ namespace FlashCards.Models.Tests
                 Assert.AreEqual(expected[i], result[i]);
             }
         }
+
+        [TestMethod()]
+        public void IsValidTest()
+        {
+            bool expected = true;
+            bool result = DBManager.GetInstance().IsValid("TestUser", "test");
+
+            Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod()]
+        public void IsNotValidTest()
+        {
+            bool expected = false;
+            bool result = DBManager.GetInstance().IsValid("TestUser", "wrong_pass");
+
+            Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod()]
+        public void IsNickInDBTest()
+        {
+            bool expected = true;
+            bool result = DBManager.GetInstance().IsNickInDB("TestUser");
+
+            Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod()]
+        public void IsNickNotInDBTest()
+        {
+            bool expected = false;
+            bool result = DBManager.GetInstance().IsNickInDB("NotExistingUser");
+
+            Assert.AreEqual(expected, result);
+        }
     }
 }
