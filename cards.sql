@@ -31,7 +31,7 @@ CREATE TABLE `cards` (
   UNIQUE KEY `unit` (`unit`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `cards_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `cards` (
 
 LOCK TABLES `cards` WRITE;
 /*!40000 ALTER TABLE `cards` DISABLE KEYS */;
-INSERT INTO `cards` VALUES (1,1,'Testowy Rozdział','pies;dog/kot;cat/dłoń;hand/');
+INSERT INTO `cards` VALUES (1,1,'Testowy Rozdział','pies;dog/kot;cat/dłoń;hand/'),(2,1,'Testowy Rozdział 2','ąę;ae/źć;zc/');
 /*!40000 ALTER TABLE `cards` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -79,4 +79,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-06-07 15:34:14
+-- Dump completed on 2018-06-08  9:44:58

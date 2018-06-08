@@ -15,7 +15,7 @@ namespace FlashCards.Models
         public static User GetInstance()
         {
             if (_child == null)
-                throw new NullReferenceException();
+                throw new NullReferenceException("Tip: Run LoadUser() first.");
             return _child;
         }
 

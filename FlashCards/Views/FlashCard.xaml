@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="FlashCards.Views.FlashCard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FlashCards.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="320" d:DesignWidth="340">
+    <StackPanel Background="White">
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_Fiszki">
+                <MenuItem Header="_Otwórz" Command="{Binding FileCommand}"/>
+                <MenuItem Header="Zapi_sz" Command="{Binding SaveCommand}"/>
+                <MenuItem Header="_Losuj" Command="{Binding FlashCardVM.ShuffleCommand}"/>
+                <MenuItem Header="_Wyślij" Command="{Binding SendCommand}"/>
+                <Separator/>
+                <MenuItem Header="_Zakończ"/>
+            </MenuItem>
+        </Menu>
+        <Grid Margin="0,5,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding FlashCardVM.FlierKey}"/>
+            <Button Margin="5" Grid.Row="1" Grid.Column="0" Command="{Binding FlashCardVM.NextCommand}">Wiem</Button>
+            <Button Margin="5" Grid.Row="1" Grid.Column="1" Command="{Binding FlashCardVM.ShowCommand}">Sprawdź</Button>
+            <Button Margin="5" Grid.Row="1" Grid.Column="2" Command="{Binding FlashCardVM.DontKnowCommand}">Nie wiem</Button>
+        </Grid>
+    </StackPanel>
+</UserControl>

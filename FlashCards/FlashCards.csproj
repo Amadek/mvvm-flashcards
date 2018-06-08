@@ -71,8 +71,12 @@
     <Compile Include="Models\DBManager.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="ViewModels\Command.cs" />
+    <Compile Include="ViewModels\FlashCardViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="Views\FlashCard.xaml.cs">
+      <DependentUpon>FlashCard.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -85,6 +89,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\FlashCard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\FileManager.cs" />
