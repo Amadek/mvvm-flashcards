@@ -8,17 +8,6 @@ namespace FlashCards.Models
 {
     public class FileManager
     {
-        private static FileManager _child;
-
-        private FileManager() { }
-
-        public static FileManager GetInstance()
-        {
-            if (_child == null)
-                _child = new FileManager();
-            return _child;
-        }
-
         private StreamReader _sr;
         private StreamWriter _sw;
 

@@ -12,39 +12,43 @@ namespace FlashCards.Models
 
         private User() { }
 
-        public static void LoadUser(string name)
+        public static User Instance
         {
-            _instance = new User()
+            get
             {
-                Name = name,
-                ID = DBManager.GetInstance().GetUserId(name)
-            };
-        }
-
-        public static User GetInstance()
-        {
-            if (_instance == null)
-                throw new NullReferenceException("Tip: Run LoadUser() first.");
-            return _instance;
+                if (_instance == null)
+                    _instance = new User();
+                return _instance;
+            }
         }
 
         public int ID { get; private set; }
         public string Name { get; private set; }
         public List<string[]> Cards { get; private set; }
 
+        public void Load(string name)
+        {
+            UsersGateway gateway = new UsersGateway();
+            Name = name;
+            ID = gateway.GetUserId(name, Database.Instance);
+        }
+
         public void LoadCardsDB(string unitName)
         {
-            Cards = DBManager.GetInstance().GetCards(ID, unitName);
+            CardsGateway gateway = new CardsGateway();
+            Cards = gateway.GetCards(ID, unitName, Database.Instance);
         }
 
         public void LoadCardsLocal(string fileName = "data.txt")
         {
-            Cards = FileManager.GetInstance().GetCards(fileName);
+            FileManager manager = new FileManager();
+            Cards = manager.GetCards(fileName);
         }
 
         public void Save()
         {
-            FileManager.GetInstance().Save(Cards);
+            FileManager manager = new FileManager();
+            manager.Save(Cards);
         }
         
         public bool IsCardsEmpty()

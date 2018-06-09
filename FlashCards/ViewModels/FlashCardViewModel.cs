@@ -56,11 +56,10 @@ namespace FlashCards.ViewModels
 
         public FlashCardViewModel()
         {
-            DBManager.GetInstance();
-            User.LoadUser("TestUser");
-            User.GetInstance().LoadCardsDB("Testowy Rozdział");
-            FlierKey = User.GetInstance().Cards[0][0];
-
+            Database.Instance.Connect();
+            User.Instance.Load("TestUser");
+            User.Instance.LoadCardsDB("Testowy Rozdział");
+            FlierKey = User.Instance.Cards[0][0];
             NextCommand = new Command(Next, IsNotCardsEmpty);
 
             ShowCommand = new Command(Show, IsNotCardsEmpty);
@@ -118,38 +117,38 @@ namespace FlashCards.ViewModels
 
         private bool IsNotCardsEmpty(object obj)
         {
-            return !User.GetInstance().IsCardsEmpty();
+            return !User.Instance.IsCardsEmpty();
         }
 
         private void Next(object obj)
         {
-            User.GetInstance().Cards.RemoveAt(0);
+            User.Instance.Cards.RemoveAt(0);
 
-            if (User.GetInstance().Cards.Count == 0)
+            if (User.Instance.Cards.Count == 0)
             {
                 FlierKey = "To już wszystkie!";
             }
             else
             {
-                FlierKey = User.GetInstance().Cards[0][0];
+                FlierKey = User.Instance.Cards[0][0];
             }
         }
 
         private void Show(object obj)
         {
-            FlierKey = User.GetInstance().Cards[0][1];
+            FlierKey = User.Instance.Cards[0][1];
         }
 
         private void DontKnow(object obj)
         {
-            User.GetInstance().MoveCardToEnd();
-            FlierKey = User.GetInstance().Cards[0][0];
+            User.Instance.MoveCardToEnd();
+            FlierKey = User.Instance.Cards[0][0];
         }
 
         private void Shufle(object obj)
         {
-            User.GetInstance().ShuffleCards();
-            FlierKey = User.GetInstance().Cards[0][0];
+            User.Instance.ShuffleCards();
+            FlierKey = User.Instance.Cards[0][0];
         }
     }
 }
