@@ -1,7 +1,4 @@
-﻿using FlashCards.Models;
-using FlashCards.ViewModels;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,19 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using MahApps.Metro.Controls;
 
-namespace FlashCards
+namespace FlashCards.Views
 {
     /// <summary>
-    /// Logika interakcji dla klasy MainWindow.xaml
+    /// Logika interakcji dla klasy Login.xaml
     /// </summary>
-    public partial class MainWindow : MetroWindow
+    public partial class Login : UserControl
     {
-        public MainWindow()
+        public Login()
         {
             InitializeComponent();
-            DataContext = new MainViewModel();
         }
     }
 }

@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="FlashCards.Views.Login"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FlashCards.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="320" d:DesignWidth="340">
+    <Grid Background="WhiteSmoke">
+        <StackPanel Margin="20">
+            <Label HorizontalContentAlignment="Center" FontSize="22">Zaloguj się</Label>
+            <TextBox Margin="0,20,0,0" Text="Login" FontSize="18" Foreground="#FF3E3E3E"/>
+            <TextBox Margin="0,20,0,0" Text="Hasło" FontSize="18" Foreground="#FF3E3E3E"/>
+            <Grid Margin="0,20,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <Button Margin="0,0,10,0" Grid.Column="0">Zaloguj</Button>
+                <Button Margin="10,0,0,0" Grid.Column="1">Stwórz konto</Button>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</UserControl>
