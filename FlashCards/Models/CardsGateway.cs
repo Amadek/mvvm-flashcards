@@ -39,7 +39,7 @@ namespace FlashCards.Models
             return fliers;
         }
 
-        public IEnumerable<string> GetUnits(int userId, IDatabase db)
+        public List<string> GetUnits(int userId, IDatabase db)
         {
             _sql = $"CALL get_units({userId})";
             _cmd = new MySqlCommand(_sql, db.Connection);

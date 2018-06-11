@@ -6,13 +6,13 @@
              xmlns:local="clr-namespace:FlashCards.Views"
              mc:Ignorable="d" 
              d:DesignHeight="320" d:DesignWidth="340">
-    <StackPanel Background="White">
+    <StackPanel Background="WhiteSmoke">
         <!--<Menu DockPanel.Dock="Top" Background="LightGray">
             <MenuItem Header="_Menu" Background="LightGray" Foreground="White">
                 <MenuItem Header="_Otwórz plik" Command="{Binding FileCommand}" Background="White" Foreground="Black"/>
             </MenuItem>
         </Menu>-->
-        <TabControl Margin="10,0,10,0">
+        <TabControl Margin="10,0,10,0" Background="WhiteSmoke">
             <TabItem Header="Fiszki">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -31,7 +31,14 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Moje kategorie">
-                <ListBox ItemsSource="{Binding FlashCardVM.UnitsBox}"/>
+                <Grid Height="220">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <ListBox x:Name="UnitBox" Grid.Row="0" ItemsSource="{Binding FlashCardVM.UnitsBox}"/>
+                    <Button Margin="0,20,0,0" Grid.Row="1" Command="{Binding FlashCardVM.LoadCommand}" CommandParameter="{Binding ElementName=UnitBox, Path=SelectedItem}">Załaduj</Button>
+                </Grid>
             </TabItem>
         </TabControl>
     </StackPanel>

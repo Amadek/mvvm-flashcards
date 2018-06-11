@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace FlashCards.ViewModels
 {
@@ -48,7 +49,7 @@ namespace FlashCards.ViewModels
         }
         #endregion
 
-        public ObservableCollection<string> UnitsBox { get; private set; }
+        public ObservableCollection<string> UnitsBox { get; set; }
 
         public Command FileCommand { get; private set; }
         public Command NextCommand { get; private set; }
@@ -57,23 +58,33 @@ namespace FlashCards.ViewModels
         //public Command SaveCommand { get; private set; }
         public Command ShuffleCommand { get; private set; }
         //public Command SendCommand { get; private set; }
+        public Command LoadCommand { get; private set; }
 
         public void LoadUser(object sender, LoginEventArgs e)
         {
             _user = e.User;
             _user.LoadCardsDB("Testowy Rozdział");
             FlierKey = _user.Cards[0][0];
+
+            var gateway = new CardsGateway();
+            var units = gateway.GetUnits(_user.ID, Database.Instance);
+            foreach (var item in units)
+            {
+                UnitsBox.Add(item);
+            }
         }
 
         private User _user = null;
 
         public FlashCardViewModel()
         {
-            
+            UnitsBox = new ObservableCollection<string>();
+
             NextCommand = new Command(Next, IsNotCardsEmpty);
             ShowCommand = new Command(Show, IsNotCardsEmpty);
             DontKnowCommand = new Command(DontKnow, IsNotCardsEmpty);
             ShuffleCommand = new Command(Shufle, IsNotCardsEmpty);
+            LoadCommand = new Command(Load, IsSelected);
 
             #region TO REFACTOR
             //#region FileCommand Initialization
@@ -156,6 +167,18 @@ namespace FlashCards.ViewModels
         {
             _user.ShuffleCards();
             FlierKey = _user.Cards[0][0];
+        }
+
+        private void Load(object obj)
+        {
+            _user.LoadCardsDB(obj as string);
+            FlierKey = _user.Cards[0][0];
+            MessageBox.Show("Załadowano");
+        }
+
+        private bool IsSelected(object obj)
+        {
+            return _user != null && obj != null;
         }
     }
 }
