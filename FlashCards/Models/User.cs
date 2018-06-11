@@ -8,25 +8,11 @@ namespace FlashCards.Models
 {
     public class User
     {
-        private static User _instance;
-
-        private User() { }
-
-        public static User Instance
-        {
-            get
-            {
-                if (_instance == null)
-                    _instance = new User();
-                return _instance;
-            }
-        }
-
         public int ID { get; private set; }
         public string Name { get; private set; }
         public List<string[]> Cards { get; private set; }
 
-        public void Load(string name)
+        public User(string name)
         {
             UsersGateway gateway = new UsersGateway();
             Name = name;

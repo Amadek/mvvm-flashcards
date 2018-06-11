@@ -1,6 +1,7 @@
 ﻿using FlashCards.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -47,6 +48,8 @@ namespace FlashCards.ViewModels
         }
         #endregion
 
+        public ObservableCollection<string> UnitsBox { get; private set; }
+
         public Command FileCommand { get; private set; }
         public Command NextCommand { get; private set; }
         public Command ShowCommand { get; private set; }
@@ -55,19 +58,21 @@ namespace FlashCards.ViewModels
         public Command ShuffleCommand { get; private set; }
         //public Command SendCommand { get; private set; }
 
+        public void LoadUser(object sender, LoginEventArgs e)
+        {
+            _user = e.User;
+            _user.LoadCardsDB("Testowy Rozdział");
+            FlierKey = _user.Cards[0][0];
+        }
+
+        private User _user = null;
+
         public FlashCardViewModel()
         {
-            Console.WriteLine(SHA1.Create().ToString());
-            Database.Instance.Connect();
-            User.Instance.Load("TestUser");
-            User.Instance.LoadCardsDB("Testowy Rozdział");
-            FlierKey = User.Instance.Cards[0][0];
+            
             NextCommand = new Command(Next, IsNotCardsEmpty);
-
             ShowCommand = new Command(Show, IsNotCardsEmpty);
-
             DontKnowCommand = new Command(DontKnow, IsNotCardsEmpty);
-
             ShuffleCommand = new Command(Shufle, IsNotCardsEmpty);
 
             #region TO REFACTOR
@@ -119,38 +124,38 @@ namespace FlashCards.ViewModels
 
         private bool IsNotCardsEmpty(object obj)
         {
-            return !User.Instance.IsCardsEmpty();
+            return _user != null && !_user.IsCardsEmpty();
         }
 
         private void Next(object obj)
         {
-            User.Instance.Cards.RemoveAt(0);
+            _user.Cards.RemoveAt(0);
             
-            if (User.Instance.Cards.Count == 0)
+            if (_user.Cards.Count == 0)
             {
                 FlierKey = "To już wszystkie!";
             }
             else
             {
-                FlierKey = User.Instance.Cards[0][0];
+                FlierKey = _user.Cards[0][0];
             }
         }
 
         private void Show(object obj)
         {
-            FlierKey = User.Instance.Cards[0][1];
+            FlierKey = _user.Cards[0][1];
         }
 
         private void DontKnow(object obj)
         {
-            User.Instance.MoveCardToEnd();
-            FlierKey = User.Instance.Cards[0][0];
+            _user.MoveCardToEnd();
+            FlierKey = _user.Cards[0][0];
         }
 
         private void Shufle(object obj)
         {
-            User.Instance.ShuffleCards();
-            FlierKey = User.Instance.Cards[0][0];
+            _user.ShuffleCards();
+            FlierKey = _user.Cards[0][0];
         }
     }
 }

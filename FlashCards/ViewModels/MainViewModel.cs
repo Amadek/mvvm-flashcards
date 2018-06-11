@@ -1,4 +1,6 @@
 ﻿
+using FlashCards.Models;
+
 namespace FlashCards.ViewModels
 {
     public class MainViewModel : BaseViewModel
@@ -8,8 +10,12 @@ namespace FlashCards.ViewModels
 
         public MainViewModel()
         {
+            Database.Instance.Connect();
+
             FlashCardVM = new FlashCardViewModel();
             LoginVM = new LoginViewModel();
+
+            LoginVM.UserLogged += FlashCardVM.LoadUser;
         }
     }
 }

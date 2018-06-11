@@ -65,7 +65,17 @@ namespace FlashCards.ViewModels
                 _visible = value;
                 OnPropertyChanged("Visible");
             }
-        } 
+        }
+        #endregion
+
+        #region UserLogged event
+        public event EventHandler<LoginEventArgs> UserLogged;
+
+        protected virtual void OnUserLogged(User user)
+        {
+            if (UserLogged != null)
+                UserLogged.Invoke(this, new LoginEventArgs() { User = user });
+        }
         #endregion
 
         public Command LoginCommand { get; private set; }
@@ -80,7 +90,11 @@ namespace FlashCards.ViewModels
         {
             var gateway = new UsersGateway();
             if (gateway.IsValid(_nick, _password, Database.Instance))
+            {
+                var user = new User(_nick);
+                OnUserLogged(user);
                 Visible = false;
+            }
             else
                 MessageBox.Show("Niepoprawna nazwa użytkownika lub hasło.");
         }

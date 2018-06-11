@@ -7,30 +7,32 @@
              mc:Ignorable="d" 
              d:DesignHeight="320" d:DesignWidth="340">
     <StackPanel Background="White">
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_Fiszki">
-                <MenuItem Header="_Otwórz" Command="{Binding FileCommand}"/>
-                <MenuItem Header="Zapi_sz" Command="{Binding SaveCommand}"/>
-                <MenuItem Header="_Losuj" Command="{Binding FlashCardVM.ShuffleCommand}"/>
-                <MenuItem Header="_Wyślij" Command="{Binding SendCommand}"/>
-                <Separator/>
-                <MenuItem Header="_Zakończ"/>
+        <!--<Menu DockPanel.Dock="Top" Background="LightGray">
+            <MenuItem Header="_Menu" Background="LightGray" Foreground="White">
+                <MenuItem Header="_Otwórz plik" Command="{Binding FileCommand}" Background="White" Foreground="Black"/>
             </MenuItem>
-        </Menu>
-        <Grid Margin="0,5,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding FlashCardVM.FlierKey}"/>
-            <Button Margin="5" Grid.Row="1" Grid.Column="0" Command="{Binding FlashCardVM.NextCommand}">Wiem</Button>
-            <Button Margin="5" Grid.Row="1" Grid.Column="1" Command="{Binding FlashCardVM.ShowCommand}">Sprawdź</Button>
-            <Button Margin="5" Grid.Row="1" Grid.Column="2" Command="{Binding FlashCardVM.DontKnowCommand}">Nie wiem</Button>
-        </Grid>
+        </Menu>-->
+        <TabControl Margin="10,0,10,0">
+            <TabItem Header="Fiszki">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding FlashCardVM.FlierKey}"/>
+                    <Button Margin="0,10,5,0" Grid.Row="1" Grid.Column="0" Command="{Binding FlashCardVM.NextCommand}">Wiem</Button>
+                    <Button Margin="5,10,5,0" Grid.Row="1" Grid.Column="1" Command="{Binding FlashCardVM.ShowCommand}">Sprawdź</Button>
+                    <Button Margin="5,10,0,0" Grid.Row="1" Grid.Column="2" Command="{Binding FlashCardVM.DontKnowCommand}">Nie wiem</Button>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Moje kategorie">
+                <ListBox ItemsSource="{Binding FlashCardVM.UnitsBox}"/>
+            </TabItem>
+        </TabControl>
     </StackPanel>
 </UserControl>
