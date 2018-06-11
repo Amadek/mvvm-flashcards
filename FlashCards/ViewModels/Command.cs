@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace FlashCards.ViewModels
 {
-    class Command : ICommand
+    public class Command : ICommand
     {
         private Action<object> _execute;
         private Predicate<object> _canExecute;

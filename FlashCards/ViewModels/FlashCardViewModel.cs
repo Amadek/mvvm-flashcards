@@ -2,12 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace FlashCards.ViewModels
 {
-    class FlashCardViewModel : BaseViewModel
+    public class FlashCardViewModel : BaseViewModel
     {
         #region FileName Property
         private string _fileName;
@@ -56,6 +57,7 @@ namespace FlashCards.ViewModels
 
         public FlashCardViewModel()
         {
+            Console.WriteLine(SHA1.Create().ToString());
             Database.Instance.Connect();
             User.Instance.Load("TestUser");
             User.Instance.LoadCardsDB("Testowy Rozdział");
@@ -123,7 +125,7 @@ namespace FlashCards.ViewModels
         private void Next(object obj)
         {
             User.Instance.Cards.RemoveAt(0);
-
+            
             if (User.Instance.Cards.Count == 0)
             {
                 FlierKey = "To już wszystkie!";

@@ -9,8 +9,10 @@
     <Grid Background="WhiteSmoke">
         <StackPanel Margin="20">
             <Label HorizontalContentAlignment="Center" FontSize="22">Zaloguj się</Label>
-            <TextBox Margin="0,20,0,0" Text="Login" FontSize="18" Foreground="#FF3E3E3E"/>
-            <TextBox Margin="0,20,0,0" Text="Hasło" FontSize="18" Foreground="#FF3E3E3E"/>
+            <Label FontSize="16">Login:</Label>
+            <TextBox Text="{Binding LoginVM.Nick, UpdateSourceTrigger=PropertyChanged}" FontSize="18"/>
+            <Label Margin="0,20,0,0" FontSize="16">Hasło:</Label>
+            <TextBox Text="{Binding LoginVM.Password, UpdateSourceTrigger=PropertyChanged}" FontSize="18"/>
             <Grid Margin="0,20,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -19,7 +21,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
-                <Button Margin="0,0,10,0" Grid.Column="0">Zaloguj</Button>
+                <Button Margin="0,0,10,0" Grid.Column="0" Command="{Binding LoginVM.LoginCommand}">Zaloguj</Button>
                 <Button Margin="10,0,0,0" Grid.Column="1">Stwórz konto</Button>
             </Grid>
         </StackPanel>

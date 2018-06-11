@@ -8,8 +8,11 @@
         xmlns:views="clr-namespace:FlashCards.Views"
         mc:Ignorable="d"
         Title="MainWindow" Height="320" Width="340">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolVisibilityConverter"/>
+    </Window.Resources>
     <Grid>
         <views:FlashCard/>
-        <views:Login/>
+        <views:Login Visibility="{Binding LoginVM.Visible, Converter={StaticResource BoolVisibilityConverter}}"/>
     </Grid>
 </Controls:MetroWindow>
