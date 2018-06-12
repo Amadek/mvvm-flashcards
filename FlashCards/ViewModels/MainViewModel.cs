@@ -10,8 +10,6 @@ namespace FlashCards.ViewModels
 
         public MainViewModel()
         {
-            Database.Instance.Connect();
-
             FlashCardVM = new FlashCardViewModel();
             LoginVM = new LoginViewModel();
 

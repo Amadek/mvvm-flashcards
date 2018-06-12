@@ -1,7 +1,9 @@
 ﻿using FlashCards.Models;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -85,6 +87,7 @@ namespace FlashCards.ViewModels
             DontKnowCommand = new Command(DontKnow, IsNotCardsEmpty);
             ShuffleCommand = new Command(Shufle, IsNotCardsEmpty);
             LoadCommand = new Command(Load, IsSelected);
+            FileCommand = new Command(LoadLocal, IsLogged);
 
             #region TO REFACTOR
             //#region FileCommand Initialization
@@ -179,6 +182,30 @@ namespace FlashCards.ViewModels
         private bool IsSelected(object obj)
         {
             return _user != null && obj != null;
+        }
+
+        private void LoadLocal(object obj)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+
+            if (fileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    _user.LoadCardsLocal(fileDialog.FileName);
+                    FlierKey = _user.Cards[0][0];
+                }
+                catch (InvalidDataException e)
+                {
+                    MessageBox.Show(e.Message);
+                }
+            }
+        }
+
+        private bool IsLogged(object obj)
+        {
+            return _user != null;
         }
     }
 }

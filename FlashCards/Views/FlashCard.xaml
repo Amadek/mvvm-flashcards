@@ -32,12 +32,17 @@
             </TabItem>
             <TabItem Header="Moje kategorie">
                 <Grid Height="220">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <ListBox x:Name="UnitBox" Grid.Row="0" ItemsSource="{Binding FlashCardVM.UnitsBox}"/>
-                    <Button Margin="0,20,0,0" Grid.Row="1" Command="{Binding FlashCardVM.LoadCommand}" CommandParameter="{Binding ElementName=UnitBox, Path=SelectedItem}">Załaduj</Button>
+                    <ListBox x:Name="UnitBox" Grid.Row="0" Grid.ColumnSpan="2" ItemsSource="{Binding FlashCardVM.UnitsBox}"/>
+                    <Button Margin="0,20,10,0" Grid.Row="1" Grid.Column="0" Command="{Binding FlashCardVM.LoadCommand}" CommandParameter="{Binding ElementName=UnitBox, Path=SelectedItem}">Załaduj</Button>
+                    <Button Margin="10,20,0,0" Grid.Row="1" Grid.Column="1" Command="{Binding FlashCardVM.FileCommand}">Otwórz plik</Button>
                 </Grid>
             </TabItem>
         </TabControl>

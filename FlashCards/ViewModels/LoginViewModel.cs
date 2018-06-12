@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using MySql.Data.MySqlClient;
 
 namespace FlashCards.ViewModels
 {
@@ -82,21 +83,31 @@ namespace FlashCards.ViewModels
 
         public LoginViewModel()
         {
-            Database.Instance.Connect();
             LoginCommand = new Command(Login, IsFieldsNotEmpty);
         }
 
         private void Login(object obj)
         {
-            var gateway = new UsersGateway();
-            if (gateway.IsValid(_nick, _password, Database.Instance))
+            try
             {
-                var user = new User(_nick);
-                OnUserLogged(user);
-                Visible = false;
+                Database.Instance.Connect();
+                var gateway = new UsersGateway();
+
+                if (gateway.IsValid(_nick, _password, Database.Instance))
+                {
+                    var user = new User(_nick);
+                    OnUserLogged(user);
+                    Visible = false;
+                }
+                else
+                {
+                    MessageBox.Show("Niepoprawna nazwa użytkownika lub hasło.");
+                }
             }
-            else
-                MessageBox.Show("Niepoprawna nazwa użytkownika lub hasło.");
+            catch (Exception)
+            {
+                MessageBox.Show("Problem z połączeniem się z bazą.");
+            }
         }
 
         private bool IsFieldsNotEmpty(object obj)
