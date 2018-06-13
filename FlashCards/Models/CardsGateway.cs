@@ -13,6 +13,19 @@ namespace FlashCards.Models
         private MySqlCommand _cmd;
         private MySqlDataReader _reader;
 
+        public void SendCards(int userId, string unit, List<string[]> cards, IDatabase db)
+        {
+            string s_cards = "";
+            foreach (var item in cards)
+            {
+                s_cards += $"{item[0]};{item[1]}/";
+            }
+
+            _sql = $@"CALL insert_cards({userId}, ""{unit}"", ""{s_cards}"")";
+            _cmd = new MySqlCommand(_sql, db.Connection);
+            _cmd.ExecuteNonQuery();
+        }
+
         public List<string[]> GetCards(int userId, string unit, IDatabase db)
         {
             _sql = $@"CALL show_cards({userId}, ""{unit}"")";

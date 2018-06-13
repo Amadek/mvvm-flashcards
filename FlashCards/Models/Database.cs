@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FlashCards.Models
 {
-    class Database : IDatabase
+    public class Database : IDatabase
     {
         private static Database _instance;
 

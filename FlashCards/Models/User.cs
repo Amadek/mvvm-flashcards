@@ -56,5 +56,11 @@ namespace FlashCards.Models
                 .OrderBy(s => random.Next())
                 .ToList();
         }
+
+        public void Send(string unit)
+        {
+            var gateway = new CardsGateway();
+            gateway.SendCards(ID, unit, Cards, Database.Instance);
+        }
     }
 }

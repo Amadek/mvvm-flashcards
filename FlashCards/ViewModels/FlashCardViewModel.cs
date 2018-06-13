@@ -14,6 +14,8 @@ namespace FlashCards.ViewModels
 {
     public class FlashCardViewModel : BaseViewModel
     {
+        private User _user = null;
+
         #region FileName Property
         private string _fileName;
         public string FileName
@@ -51,21 +53,42 @@ namespace FlashCards.ViewModels
         }
         #endregion
 
+        #region CategoryName Property
+        private string _categoryName;
+        public string CategoryName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_categoryName))
+                    return "";
+                return _categoryName;
+            }
+            set
+            {
+                if (value != _categoryName)
+                {
+                    _categoryName = value;
+                    OnPropertyChanged("CategoryName");
+                }
+            }
+        } 
+        #endregion
+
         public ObservableCollection<string> UnitsBox { get; set; }
 
         public Command FileCommand { get; private set; }
         public Command NextCommand { get; private set; }
         public Command ShowCommand { get; private set; }
         public Command DontKnowCommand { get; private set; }
-        //public Command SaveCommand { get; private set; }
+        public Command SaveCommand { get; private set; }
         public Command ShuffleCommand { get; private set; }
-        //public Command SendCommand { get; private set; }
+        public Command SendCommand { get; private set; }
         public Command LoadCommand { get; private set; }
 
         public void LoadUser(object sender, LoginEventArgs e)
         {
             _user = e.User;
-            _user.LoadCardsDB("Testowy Rozdział");
+            _user.LoadCardsLocal();
             FlierKey = _user.Cards[0][0];
 
             var gateway = new CardsGateway();
@@ -76,7 +99,6 @@ namespace FlashCards.ViewModels
             }
         }
 
-        private User _user = null;
 
         public FlashCardViewModel()
         {
@@ -88,57 +110,23 @@ namespace FlashCards.ViewModels
             ShuffleCommand = new Command(Shufle, IsNotCardsEmpty);
             LoadCommand = new Command(Load, IsSelected);
             FileCommand = new Command(LoadLocal, IsLogged);
+            SaveCommand = new Command(Save, IsNotCardsEmpty);
+            SendCommand = new Command(Send, IsCatNotNullAndUnique);
+        }
 
-            #region TO REFACTOR
-            //#region FileCommand Initialization
-            //FileCommand = new Command(obj =>
-            //{
-            //    OpenFileDialog fileDialog = new OpenFileDialog();
-            //    fileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
-
-            //    if (fileDialog.ShowDialog() == true)
-            //    {
-            //        try
-            //        {
-            //            _dataModel = new FileManager(fileDialog.FileName);
-            //            FlierKey = _dataModel.FlashCards[0][0];
-            //        }
-            //        catch (InvalidDataException e)
-            //        {
-            //            MessageBox.Show(e.Message);
-            //        }
-            //    }
-            //});
-            //#endregion
-
-            //#region SaveCommand Initialization
-            //SaveCommand = new Command(obj =>
-            //{
-            //    _dataModel.Save();
-            //});
-            //#endregion
-
-            //#region SendCommand Initalization
-            //SendCommand = new Command(obj =>
-            //{
-            //    try
-            //    {
-            //        _dataModel.Send();
-            //        MessageBox.Show("Wysłano.");
-            //    }
-            //    catch (MySqlException)
-            //    {
-            //        MessageBox.Show("Problem z połączeniem się z bazą.");
-            //    }
-
-            //}); 
-            //#endregion
-            #endregion
+        private bool IsLogged(object obj)
+        {
+            return _user != null;
         }
 
         private bool IsNotCardsEmpty(object obj)
         {
-            return _user != null && !_user.IsCardsEmpty();
+            return IsLogged(obj) && !_user.IsCardsEmpty();
+        }
+        
+        private bool IsSelected(object obj)
+        {
+            return IsLogged(obj) && obj != null;
         }
 
         private void Next(object obj)
@@ -179,11 +167,6 @@ namespace FlashCards.ViewModels
             MessageBox.Show("Załadowano");
         }
 
-        private bool IsSelected(object obj)
-        {
-            return _user != null && obj != null;
-        }
-
         private void LoadLocal(object obj)
         {
             OpenFileDialog fileDialog = new OpenFileDialog();
@@ -203,9 +186,29 @@ namespace FlashCards.ViewModels
             }
         }
 
-        private bool IsLogged(object obj)
+        private void Save(object obj)
         {
-            return _user != null;
+            _user.Save();
+        }
+
+        private void Send(object obj)
+        {
+            _user.Send(CategoryName);
+            MessageBox.Show("Wysłano");
+        }
+
+        private bool IsCatNotNullAndUnique(object obj)
+        {
+            if (string.IsNullOrEmpty(CategoryName))
+                return false;
+
+            foreach (var item in UnitsBox)
+            {
+                if (CategoryName == item)
+                    return false;
+            }
+
+            return true;
         }
     }
 }

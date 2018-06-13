@@ -12,7 +12,7 @@
                 <MenuItem Header="_Otwórz plik" Command="{Binding FileCommand}" Background="White" Foreground="Black"/>
             </MenuItem>
         </Menu>-->
-        <TabControl Margin="10,0,10,0" Background="WhiteSmoke">
+        <TabControl Margin="10,0,10,0" Background="WhiteSmoke" >
             <TabItem Header="Fiszki">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -21,13 +21,15 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="140"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding FlashCardVM.FlierKey}"/>
-                    <Button Margin="0,10,5,0" Grid.Row="1" Grid.Column="0" Command="{Binding FlashCardVM.NextCommand}">Wiem</Button>
-                    <Button Margin="5,10,5,0" Grid.Row="1" Grid.Column="1" Command="{Binding FlashCardVM.ShowCommand}">Sprawdź</Button>
-                    <Button Margin="5,10,0,0" Grid.Row="1" Grid.Column="2" Command="{Binding FlashCardVM.DontKnowCommand}">Nie wiem</Button>
+                    <Label Margin="0,10,0,0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30" Background="White" Content="{Binding FlashCardVM.FlierKey}"/>
+                    <Button Margin="0,20,10,0" Grid.Row="1" Grid.Column="0" Command="{Binding FlashCardVM.NextCommand}">Wiem</Button>
+                    <Button Margin="10,20,10,0" Grid.Row="1" Grid.Column="1" Command="{Binding FlashCardVM.ShowCommand}">Sprawdź</Button>
+                    <Button Margin="10,20,0,0" Grid.Row="1" Grid.Column="2" Command="{Binding FlashCardVM.DontKnowCommand}">Nie wiem</Button>
+                    <Button Margin="0,20,0,0" Grid.Row="2" Grid.ColumnSpan="3" Command="{Binding FlashCardVM.SaveCommand}">Zapisz</Button>
                 </Grid>
             </TabItem>
             <TabItem Header="Moje kategorie">
@@ -44,6 +46,13 @@
                     <Button Margin="0,20,10,0" Grid.Row="1" Grid.Column="0" Command="{Binding FlashCardVM.LoadCommand}" CommandParameter="{Binding ElementName=UnitBox, Path=SelectedItem}">Załaduj</Button>
                     <Button Margin="10,20,0,0" Grid.Row="1" Grid.Column="1" Command="{Binding FlashCardVM.FileCommand}">Otwórz plik</Button>
                 </Grid>
+            </TabItem>
+            <TabItem Header="Wyślij">
+                <StackPanel>
+                    <Label FontSize="16">Nazwa kategorii:</Label>
+                    <TextBox Text="{Binding FlashCardVM.CategoryName, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Margin="0,20,0,0" Command="{Binding FlashCardVM.SendCommand}">Wyślij</Button>
+                </StackPanel>
             </TabItem>
         </TabControl>
     </StackPanel>
