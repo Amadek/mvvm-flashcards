@@ -1,4 +1,6 @@
-﻿using FlashCards.Models;
+﻿using FlashCards.Helpers;
+using FlashCards.Models;
+using FlashCards.Views;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -15,25 +17,6 @@ namespace FlashCards.ViewModels
     public class FlashCardViewModel : BaseViewModel
     {
         private User _user = null;
-
-        #region FileName Property
-        private string _fileName;
-        public string FileName
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_fileName))
-                {
-                    return "Wybierz plik...";
-                }
-                return _fileName;
-            }
-            set
-            {
-                _fileName = value;
-            }
-        }
-        #endregion
 
         #region FlierKey Property
         private string _flierKey;
@@ -76,14 +59,21 @@ namespace FlashCards.ViewModels
 
         public ObservableCollection<string> UnitsBox { get; set; }
 
-        public Command FileCommand { get; private set; }
+        // Flashcards body:
         public Command NextCommand { get; private set; }
         public Command ShowCommand { get; private set; }
         public Command DontKnowCommand { get; private set; }
-        public Command SaveCommand { get; private set; }
+
+        // Flashcards footer:
         public Command ShuffleCommand { get; private set; }
-        public Command SendCommand { get; private set; }
+        public Command SaveCommand { get; private set; }
+
+        // My categories:
         public Command LoadCommand { get; private set; }
+        public Command FileCommand { get; private set; }
+
+        // Send tab:
+        public Command SendCommand { get; private set; }
 
         public void LoadUser(object sender, LoginEventArgs e)
         {
@@ -98,41 +88,38 @@ namespace FlashCards.ViewModels
                 UnitsBox.Add(item);
             }
         }
-
-
+        
         public FlashCardViewModel()
         {
             UnitsBox = new ObservableCollection<string>();
 
+            // Flashcards body:
             NextCommand = new Command(Next, IsNotCardsEmpty);
             ShowCommand = new Command(Show, IsNotCardsEmpty);
             DontKnowCommand = new Command(DontKnow, IsNotCardsEmpty);
+
+            // Flashcards footer:
             ShuffleCommand = new Command(Shufle, IsNotCardsEmpty);
+            SaveCommand = new Command(Save, IsNotCardsEmpty);
+
+            // My categories:
             LoadCommand = new Command(Load, IsSelected);
             FileCommand = new Command(LoadLocal, IsLogged);
-            SaveCommand = new Command(Save, IsNotCardsEmpty);
+
+            // Send tab:
             SendCommand = new Command(Send, IsCatNotNullAndUnique);
         }
 
-        private bool IsLogged(object obj)
-        {
-            return _user != null;
-        }
+        #region Actions
 
-        private bool IsNotCardsEmpty(object obj)
-        {
-            return IsLogged(obj) && !_user.IsCardsEmpty();
-        }
-        
-        private bool IsSelected(object obj)
-        {
-            return IsLogged(obj) && obj != null;
-        }
-
+        /* *************************
+         * Flashcards body actions:
+         * *************************
+         */
         private void Next(object obj)
         {
             _user.Cards.RemoveAt(0);
-            
+
             if (_user.Cards.Count == 0)
             {
                 FlierKey = "To już wszystkie!";
@@ -153,24 +140,38 @@ namespace FlashCards.ViewModels
             _user.MoveCardToEnd();
             FlierKey = _user.Cards[0][0];
         }
-
+        
+        /* ***************************
+         * Flashcards footer actions:
+         * ***************************
+         */
         private void Shufle(object obj)
         {
             _user.ShuffleCards();
             FlierKey = _user.Cards[0][0];
         }
 
+        private void Save(object obj)
+        {
+            _user.Save();
+        }
+
+        /* ***********************
+         * My categories actions:
+         * ***********************
+         */
         private void Load(object obj)
         {
             _user.LoadCardsDB(obj as string);
             FlierKey = _user.Cards[0][0];
-            MessageBox.Show("Załadowano");
+            var manager = new AlertsManager();
+            manager.Show("Załadowano pomyślnie", Alerts.Success);
         }
 
         private void LoadLocal(object obj)
         {
             OpenFileDialog fileDialog = new OpenFileDialog();
-            fileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            fileDialog.Filter = "Pliki tekstowe (*.txt)|*.txt|Wszystkie pliki (*.*)|*.*";
 
             if (fileDialog.ShowDialog() == true)
             {
@@ -186,20 +187,37 @@ namespace FlashCards.ViewModels
             }
         }
 
-        private void Save(object obj)
-        {
-            _user.Save();
-        }
-
+        /* ******************
+         * Send tab actions:
+         * ******************
+         */
         private void Send(object obj)
         {
             _user.Send(CategoryName);
-            MessageBox.Show("Wysłano");
+            var manager = new AlertsManager();
+            manager.Show("Wysłano", Alerts.Success);
+        } 
+        #endregion
+
+        #region Predicates
+        private bool IsLogged(object obj)
+        {
+            return _user != null;
+        }
+
+        private bool IsNotCardsEmpty(object obj)
+        {
+            return IsLogged(obj) && !_user.IsCardsEmpty();
+        }
+
+        private bool IsSelected(object obj)
+        {
+            return IsLogged(obj) && obj != null;
         }
 
         private bool IsCatNotNullAndUnique(object obj)
         {
-            if (string.IsNullOrEmpty(CategoryName))
+            if (string.IsNullOrWhiteSpace(CategoryName))
                 return false;
 
             foreach (var item in UnitsBox)
@@ -210,5 +228,6 @@ namespace FlashCards.ViewModels
 
             return true;
         }
+        #endregion
     }
 }

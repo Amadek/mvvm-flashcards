@@ -7,11 +7,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="320" d:DesignWidth="340">
     <StackPanel Background="WhiteSmoke">
-        <!--<Menu DockPanel.Dock="Top" Background="LightGray">
-            <MenuItem Header="_Menu" Background="LightGray" Foreground="White">
-                <MenuItem Header="_Otwórz plik" Command="{Binding FileCommand}" Background="White" Foreground="Black"/>
-            </MenuItem>
-        </Menu>-->
         <TabControl Margin="10,0,10,0" Background="WhiteSmoke" >
             <TabItem Header="Fiszki">
                 <Grid>
@@ -29,7 +24,8 @@
                     <Button Margin="0,20,10,0" Grid.Row="1" Grid.Column="0" Command="{Binding FlashCardVM.NextCommand}">Wiem</Button>
                     <Button Margin="10,20,10,0" Grid.Row="1" Grid.Column="1" Command="{Binding FlashCardVM.ShowCommand}">Sprawdź</Button>
                     <Button Margin="10,20,0,0" Grid.Row="1" Grid.Column="2" Command="{Binding FlashCardVM.DontKnowCommand}">Nie wiem</Button>
-                    <Button Margin="0,20,0,0" Grid.Row="2" Grid.ColumnSpan="3" Command="{Binding FlashCardVM.SaveCommand}">Zapisz</Button>
+                    <Button Margin="0,20,10,0" Grid.Row="2" Grid.ColumnSpan="2" Command="{Binding FlashCardVM.ShuffleCommand}">Losuj</Button>
+                    <Button Margin="10,20,0,0" Grid.Row="2" Grid.Column="2" Command="{Binding FlashCardVM.SaveCommand}">Zapisz</Button>
                 </Grid>
             </TabItem>
             <TabItem Header="Moje kategorie">

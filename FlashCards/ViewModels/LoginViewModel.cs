@@ -1,11 +1,6 @@
 ﻿using FlashCards.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using MySql.Data.MySqlClient;
+using FlashCards.Helpers;
 
 namespace FlashCards.ViewModels
 {
@@ -88,6 +83,7 @@ namespace FlashCards.ViewModels
 
         private void Login(object obj)
         {
+            var manager = new AlertsManager();
             try
             {
                 Database.Instance.Connect();
@@ -101,12 +97,12 @@ namespace FlashCards.ViewModels
                 }
                 else
                 {
-                    MessageBox.Show("Niepoprawna nazwa użytkownika lub hasło.");
+                    manager.Show("Niepoprawna nazwa użytkownika lub hasło.", Alerts.Warning);
                 }
             }
             catch (Exception)
             {
-                MessageBox.Show("Problem z połączeniem się z bazą.");
+                manager.Show("Problem z połączeniem z internetem.", Alerts.Warning);
             }
         }
 
